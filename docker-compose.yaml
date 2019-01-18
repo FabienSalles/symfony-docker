@@ -1,6 +1,17 @@
 version: '3.4'
 
 services:
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-training}
+      MYSQL_USER: ${MYSQL_USER:-training}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-training}
+    ports:
+      - "3306:3306"
+
   app:
     build:
       context: .
@@ -8,6 +19,8 @@ services:
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
+    depends_on:
+      - db
     volumes:
       # Comment out the next line in production
       - ./:/srv/app:rw,cached
